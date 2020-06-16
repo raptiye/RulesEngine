@@ -8,7 +8,7 @@ using Xunit;
 
 namespace RulesEngine.UnitTest
 {
-    [Trait("Category","Unit")]
+    [Trait("Category", "Unit")]
     public class RuleCompilerTest
     {
         [Fact]
@@ -23,7 +23,7 @@ namespace RulesEngine.UnitTest
         {
             var compiler = new RuleCompiler(new RuleExpressionBuilderFactory(new ReSettings()), new NullLogger<RuleCompiler>());
             Assert.Throws<ArgumentException>(() => compiler.CompileRule(null, null));
-            Assert.Throws<ArgumentException>(() => compiler.CompileRule(null, new RuleParameter[] { null}));
+            Assert.Throws<ArgumentException>(() => compiler.CompileRule(null, new RuleParameter[] { null }));
         }
 
 

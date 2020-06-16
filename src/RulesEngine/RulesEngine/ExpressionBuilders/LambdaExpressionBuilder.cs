@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using RulesEngine;
-using RulesEngine.ExpressionBuilders;
 using RulesEngine.HelperFunctions;
 using RulesEngine.Models;
 using System;
@@ -38,7 +36,7 @@ namespace RulesEngine.ExpressionBuilders
                 var binaryExpression = Expression.And(Expression.Constant(true), Expression.Constant(false));
                 var exceptionMessage = ex.Message;
                 return Helpers.ToResultTreeExpression(rule, null, binaryExpression, typeParamExpressions, ruleInputExp, exceptionMessage);
-            }           
+            }
         }
     }
 }

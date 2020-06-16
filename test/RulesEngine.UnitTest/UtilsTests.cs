@@ -5,7 +5,6 @@ using RulesEngine.HelperFunctions;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Text;
 using Xunit;
 
 namespace RulesEngine.UnitTest
@@ -16,7 +15,7 @@ namespace RulesEngine.UnitTest
         public List<int> testList { get; set; }
     }
 
-    [Trait("Category","Unit")]
+    [Trait("Category", "Unit")]
     public class UtilsTests
     {
 
@@ -34,7 +33,8 @@ namespace RulesEngine.UnitTest
         [Fact]
         public void GetTypedObject_nonDynamicObject()
         {
-            var obj = new {
+            var obj = new
+            {
                 test = "hello"
             };
             object typedobj = Utils.GetTypedObject(obj);
@@ -42,7 +42,7 @@ namespace RulesEngine.UnitTest
             Assert.NotNull(typedobj.GetType().GetProperty("test"));
         }
 
-       [Fact]
+        [Fact]
         public void CreateObject_dynamicObject()
         {
             dynamic obj = new ExpandoObject();
@@ -63,7 +63,7 @@ namespace RulesEngine.UnitTest
             obj.testList = new List<int> { 1, 2, 3 };
             obj.testEmptyList = new List<object>();
 
-            Type type = Utils.CreateAbstractClassType( obj);
+            Type type = Utils.CreateAbstractClassType(obj);
             Assert.NotEqual(typeof(ExpandoObject), type);
             Assert.NotNull(type.GetProperty("test"));
 

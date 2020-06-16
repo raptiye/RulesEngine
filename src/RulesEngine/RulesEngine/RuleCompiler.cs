@@ -57,7 +57,7 @@ namespace RulesEngine
         /// <param name="input"></param>
         /// <param name="ruleParam"></param>
         /// <returns>Compiled func delegate</returns>
-        public Delegate CompileRule(Rule rule,params RuleParameter[] ruleParams)
+        public Delegate CompileRule(Rule rule, params RuleParameter[] ruleParams)
         {
             try
             {
@@ -262,6 +262,6 @@ namespace RulesEngine
             }
 
             return isSuccessExpression;
-        } 
+        }
     }
 }

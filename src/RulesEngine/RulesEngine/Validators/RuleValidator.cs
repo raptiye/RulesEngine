@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+using FluentValidation;
+using RulesEngine.HelperFunctions;
+using RulesEngine.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using FluentValidation;
-using RulesEngine.HelperFunctions;
-using RulesEngine.Models;
 
 namespace RulesEngine.Validators
 {
@@ -19,21 +19,22 @@ namespace RulesEngine.Validators
             RuleFor(c => c.RuleName).NotEmpty().WithMessage(Constants.RULE_NAME_NULL_ERRMSG);
 
             //Nested expression check
-            When(c => c.RuleExpressionType == null,() =>
-            {
-                RuleFor(c => c.Operator)
-                   .NotNull().WithMessage(Constants.OPERATOR_NULL_ERRMSG)
-                   .Must(op => _nestedOperators.Any(x => x.ToString().Equals(op, StringComparison.OrdinalIgnoreCase)))
-                   .WithMessage(Constants.OPERATOR_INCORRECT_ERRMSG);
+            When(c => c.RuleExpressionType == null, () =>
+             {
+                 RuleFor(c => c.Operator)
+                    .NotNull().WithMessage(Constants.OPERATOR_NULL_ERRMSG)
+                    .Must(op => _nestedOperators.Any(x => x.ToString().Equals(op, StringComparison.OrdinalIgnoreCase)))
+                    .WithMessage(Constants.OPERATOR_INCORRECT_ERRMSG);
 
-                When(c => c.Rules?.Any() != true, () =>
-                {
-                    RuleFor(c => c.WorkflowRulesToInject).NotEmpty().WithMessage(Constants.INJECT_WORKFLOW_RULES_ERRMSG);
-                })
-                .Otherwise(() => {
-                    RuleFor(c => c.Rules).Must(BeValidRulesList);
-                });
-            });
+                 When(c => c.Rules?.Any() != true, () =>
+                 {
+                     RuleFor(c => c.WorkflowRulesToInject).NotEmpty().WithMessage(Constants.INJECT_WORKFLOW_RULES_ERRMSG);
+                 })
+                 .Otherwise(() =>
+                 {
+                     RuleFor(c => c.Rules).Must(BeValidRulesList);
+                 });
+             });
             RegisterExpressionTypeRules();
         }
 
@@ -52,7 +53,8 @@ namespace RulesEngine.Validators
             if (rules?.Any() != true) return false;
             var validator = new RuleValidator();
             var isValid = true;
-            foreach(var rule in rules){
+            foreach (var rule in rules)
+            {
                 isValid &= validator.Validate(rule).IsValid;
                 if (!isValid) break;
             }

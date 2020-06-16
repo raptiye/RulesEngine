@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace RulesEngine.Interfaces
 {
     public interface IRulesEngine
-    { 
+    {
         /// <summary>
         /// This will execute all the rules of the specified workflow
         /// </summary>

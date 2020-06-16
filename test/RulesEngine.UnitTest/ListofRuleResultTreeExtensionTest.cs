@@ -1,8 +1,6 @@
 ﻿using RulesEngine.Extensions;
 using RulesEngine.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace RulesEngine.UnitTest

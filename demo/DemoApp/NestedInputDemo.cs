@@ -3,12 +3,12 @@ using RulesEngine.Extensions;
 using RulesEngine.Models;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
 
 namespace DemoApp
 {
-    class ListItem {
+    class ListItem
+    {
         public int Id { get; set; }
         public string Value { get; set; }
     }
@@ -17,7 +17,8 @@ namespace DemoApp
     {
         public static void Main(string[] args)
         {
-            var nestedInput = new { 
+            var nestedInput = new
+            {
                 SimpleProp = "simpleProp",
                 NestedProp = new
                 {
@@ -36,7 +37,7 @@ namespace DemoApp
                         }
                     }
                 }
-            
+
             };
 
             var files = Directory.GetFiles(Directory.GetCurrentDirectory(), "NestedInputDemo.json", SearchOption.AllDirectories);
@@ -46,8 +47,8 @@ namespace DemoApp
             var fileData = File.ReadAllText(files[0]);
             var workflowRules = JsonConvert.DeserializeObject<List<WorkflowRules>>(fileData);
 
-            var bre = new RulesEngine.RulesEngine(workflowRules.ToArray(),null);
-            foreach(var workflow in workflowRules)
+            var bre = new RulesEngine.RulesEngine(workflowRules.ToArray(), null);
+            foreach (var workflow in workflowRules)
             {
                 List<RuleResultTree> resultList = bre.ExecuteRule(workflow.WorkflowName, nestedInput);
 
@@ -59,7 +60,7 @@ namespace DemoApp
                     Console.WriteLine($"{workflow.WorkflowName} evaluation resulted in failure");
                 })
                     ;
-              
+
             }
 
 

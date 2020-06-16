@@ -14,13 +14,13 @@ namespace RulesEngine.Models
             Type = type;
             Name = type.Name;
         }
-        public RuleParameter(Type type,string name)
+        public RuleParameter(Type type, string name)
         {
             Type = type;
             Name = name;
         }
 
-        public RuleParameter(string name,object value)
+        public RuleParameter(string name, object value)
         {
             Type = value.GetType();
             Name = name;

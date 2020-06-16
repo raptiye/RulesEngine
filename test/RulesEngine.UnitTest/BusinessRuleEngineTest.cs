@@ -2,17 +2,17 @@
 // Licensed under the MIT License.
 
 using Microsoft.Extensions.Logging;
-using RulesEngine.Exceptions;
-using RulesEngine.Models;
 using Moq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using RulesEngine.Exceptions;
+using RulesEngine.Models;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
 using Xunit;
-using Newtonsoft.Json.Converters;
 
 namespace RulesEngine.UnitTest
 {
@@ -32,7 +32,7 @@ namespace RulesEngine.UnitTest
         public void RulesEngine_InjectedRules_ReturnsListOfRuleResultTree(string ruleFileName)
         {
             var re = GetRulesEngine(ruleFileName);
-            
+
             dynamic input1 = GetInput1();
             dynamic input2 = GetInput2();
             dynamic input3 = GetInput3();
@@ -67,7 +67,7 @@ namespace RulesEngine.UnitTest
             dynamic input2 = GetInput2();
             dynamic input3 = GetInput3();
 
-            var result = re.ExecuteRule("inputWorkflow",input1);
+            var result = re.ExecuteRule("inputWorkflow", input1);
             Assert.NotNull(result);
             Assert.IsType<List<RuleResultTree>>(result);
         }
@@ -172,7 +172,7 @@ namespace RulesEngine.UnitTest
 
             var injectWorkflowStr = JsonConvert.SerializeObject(injectWorkflow);
             var mockLogger = new Mock<ILogger>();
-            return new RulesEngine(new string[] { data, injectWorkflowStr}, mockLogger.Object);
+            return new RulesEngine(new string[] { data, injectWorkflowStr }, mockLogger.Object);
         }
 
 
@@ -196,6 +196,6 @@ namespace RulesEngine.UnitTest
             var telemetryInfo = "{\"noOfVisitsPerMonth\": 10,\"percentageOfBuyingToVisit\": 15}";
             return JsonConvert.DeserializeObject<ExpandoObject>(telemetryInfo, converter);
         }
-        
+
     }
 }
