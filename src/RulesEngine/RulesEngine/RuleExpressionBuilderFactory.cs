@@ -9,7 +9,7 @@ namespace RulesEngine
 {
     internal class RuleExpressionBuilderFactory
     {
-        private ReSettings _reSettings;
+        private readonly ReSettings _reSettings;
         public RuleExpressionBuilderFactory(ReSettings reSettings)
         {
             _reSettings = reSettings;

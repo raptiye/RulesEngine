@@ -80,11 +80,11 @@ namespace RulesEngine.Models
         /// <summary>
         /// This will hold the list of error messages
         /// </summary>
-        public List<string> ErrorMessages { get; set; }
+        public IList<string> ErrorMessages { get; set; }
 
         /// <summary>
         /// This will hold the list of warning messages
         /// </summary>
-        public List<string> WarningMessages { get; set; }
+        public IList<string> WarningMessages { get; set; }
     }
 }

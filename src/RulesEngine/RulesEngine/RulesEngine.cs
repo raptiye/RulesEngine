@@ -51,11 +51,11 @@ namespace RulesEngine
         /// <param name="workflowName">The name of the workflow with rules to execute against the inputs</param>
         /// <param name="inputs">A variable number of inputs</param>
         /// <returns>List of rule results</returns>
-        public List<RuleResultTree> ExecuteRule(string workflowName, params object[] inputs)
+        public IEnumerable<RuleResultTree> ExecuteRule(string workflowName, params object[] inputs)
         {
             _logger.LogTrace($"Called ExecuteRule for workflow {workflowName} and count of input {inputs.Count()}");
 
-            var ruleParams = new List<RuleParameter>();
+            IList<RuleParameter> ruleParams = new List<RuleParameter>();
 
             for (int i = 0; i < inputs.Length; i++)
             {
@@ -73,7 +73,7 @@ namespace RulesEngine
         /// <param name="workflowName">The name of the workflow with rules to execute against the inputs</param>
         /// <param name="ruleParams">A variable number of rule parameters</param>
         /// <returns>List of rule results</returns>
-        public List<RuleResultTree> ExecuteRule(string workflowName, params RuleParameter[] ruleParams)
+        public IEnumerable<RuleResultTree> ExecuteRule(string workflowName, params RuleParameter[] ruleParams)
         {
             return ValidateWorkflowAndExecuteRule(workflowName, ruleParams);
         }
@@ -119,9 +119,9 @@ namespace RulesEngine
         /// <param name="input">input</param>
         /// <param name="workflowName">workflow name</param>
         /// <returns>list of rule result set</returns>
-        private List<RuleResultTree> ValidateWorkflowAndExecuteRule(string workflowName, RuleParameter[] ruleParams)
+        private IList<RuleResultTree> ValidateWorkflowAndExecuteRule(string workflowName, RuleParameter[] ruleParams)
         {
-            List<RuleResultTree> result;
+            IList<RuleResultTree> result;
 
             if (RegisterRule(workflowName, ruleParams))
             {
@@ -153,7 +153,7 @@ namespace RulesEngine
 
             if (workflowRules != null)
             {
-                var lstFunc = new List<Delegate>();
+                IList<Delegate> lstFunc = new List<Delegate>();
                 foreach (var rule in _rulesCache.GetRules(workflowName))
                 {
                     RuleCompiler ruleCompiler = new RuleCompiler(new RuleExpressionBuilderFactory(_reSettings), _logger);
@@ -181,11 +181,11 @@ namespace RulesEngine
         /// <param name="workflowName"></param>
         /// <param name="ruleParams"></param>
         /// <returns>list of rule result set</returns>
-        private List<RuleResultTree> ExecuteRuleByWorkflow(string workflowName, RuleParameter[] ruleParams)
+        private IList<RuleResultTree> ExecuteRuleByWorkflow(string workflowName, RuleParameter[] ruleParams)
         {
             _logger.LogTrace($"Compiled rules found for {workflowName} workflow and executed");
 
-            List<RuleResultTree> result = new List<RuleResultTree>();
+            IList<RuleResultTree> result = new List<RuleResultTree>();
             var compileRulesKey = GetCompileRulesKey(workflowName, ruleParams);
             var inputs = ruleParams.Select(c => c.Value);
             foreach (var compiledRule in _rulesCache.GetCompiledRules(compileRulesKey).CompiledRules)

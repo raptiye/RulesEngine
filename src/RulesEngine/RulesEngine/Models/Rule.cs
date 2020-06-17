@@ -60,7 +60,7 @@ namespace RulesEngine.Models
         /// <summary>
         /// Gets or sets the names of common workflows
         /// </summary>
-        public List<string> WorkflowRulesToInject { get; set; }
+        public IEnumerable<string> WorkflowRulesToInject { get; set; }
 
         /// <summary>
         /// Gets or sets the rules.
@@ -68,7 +68,7 @@ namespace RulesEngine.Models
         /// <value>
         /// The rules.
         /// </value>
-        public List<Rule> Rules { get; set; }
+        public IEnumerable<Rule> Rules { get; set; }
 
         /// <summary>
         /// Gets or Sets the lambda expression. 

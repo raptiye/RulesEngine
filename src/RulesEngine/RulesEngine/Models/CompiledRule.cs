@@ -16,7 +16,7 @@ namespace RulesEngine.Models
         /// <value>
         /// The compiled rules.
         /// </value>
-        internal List<Delegate> CompiledRules { get; set; }
+        internal IEnumerable<Delegate> CompiledRules { get; set; }
     }
 
 }

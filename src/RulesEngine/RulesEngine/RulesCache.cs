@@ -59,7 +59,7 @@ namespace RulesEngine
                     }
                     foreach (string wfname in workflowRules.WorkflowRulesToInject)
                     {
-                        var injectedWorkflow = GetWorkFlowRules(wfname);
+                        WorkflowRules injectedWorkflow = GetWorkFlowRules(wfname);
                         if (injectedWorkflow == null)
                         {
                             throw new Exception($"Could not find injected Workflow: {wfname}");

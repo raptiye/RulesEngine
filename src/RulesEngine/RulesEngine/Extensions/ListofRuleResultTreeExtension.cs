@@ -13,7 +13,7 @@ namespace RulesEngine.Extensions
         public delegate void OnSuccessFunc(string eventName);
         public delegate void OnFailureFunc();
 
-        public static List<RuleResultTree> OnSuccess(this List<RuleResultTree> ruleResultTrees, OnSuccessFunc onSuccessFunc)
+        public static IEnumerable<RuleResultTree> OnSuccess(this IEnumerable<RuleResultTree> ruleResultTrees, OnSuccessFunc onSuccessFunc)
         {
             var successfulRuleResult = ruleResultTrees.FirstOrDefault(ruleResult => ruleResult.IsSuccess == true);
             if (successfulRuleResult != null)
@@ -25,7 +25,7 @@ namespace RulesEngine.Extensions
             return ruleResultTrees;
         }
 
-        public static List<RuleResultTree> OnFail(this List<RuleResultTree> ruleResultTrees, OnFailureFunc onFailureFunc)
+        public static IEnumerable<RuleResultTree> OnFail(this IEnumerable<RuleResultTree> ruleResultTrees, OnFailureFunc onFailureFunc)
         {
             bool allFailure = ruleResultTrees.All(ruleResult => ruleResult.IsSuccess == false);
             if (allFailure)

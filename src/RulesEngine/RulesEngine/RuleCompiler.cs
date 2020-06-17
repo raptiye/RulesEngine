@@ -35,18 +35,8 @@ namespace RulesEngine
         /// <exception cref="ArgumentNullException">expressionBuilderFactory</exception>
         internal RuleCompiler(RuleExpressionBuilderFactory expressionBuilderFactory, ILogger logger)
         {
-            if (expressionBuilderFactory == null)
-            {
-                throw new ArgumentNullException($"{nameof(expressionBuilderFactory)} can't be null.");
-            }
-
-            if (logger == null)
-            {
-                throw new ArgumentNullException($"{nameof(logger)} can't be null.");
-            }
-
-            _logger = logger;
-            _expressionBuilderFactory = expressionBuilderFactory;
+            _logger = logger ?? throw new ArgumentNullException($"{nameof(logger)} can't be null.");
+            _expressionBuilderFactory = expressionBuilderFactory ?? throw new ArgumentNullException($"{nameof(expressionBuilderFactory)} can't be null.");
         }
 
         /// <summary>
@@ -67,7 +57,7 @@ namespace RulesEngine
 
                 Expression<Func<RuleInput, RuleResultTree>> ruleExpression = GetExpressionForRule(rule, typeParameterExpressions, ruleInputExp);
 
-                var lambdaParameterExps = new List<ParameterExpression>(typeParameterExpressions) { ruleInputExp };
+                IList<ParameterExpression> lambdaParameterExps = new List<ParameterExpression>(typeParameterExpressions) { ruleInputExp };
 
 
                 var expression = Expression.Lambda(ruleExpression.Body, lambdaParameterExps);
@@ -119,9 +109,8 @@ namespace RulesEngine
         /// <returns></returns>
         private Expression<Func<RuleInput, RuleResultTree>> GetExpressionForRule(Rule rule, IEnumerable<ParameterExpression> typeParameterExpressions, ParameterExpression ruleInputExp)
         {
-            ExpressionType nestedOperator;
 
-            if (Enum.TryParse(rule.Operator, out nestedOperator) && nestedOperators.Contains(nestedOperator) &&
+            if (Enum.TryParse(rule.Operator, out ExpressionType nestedOperator) && nestedOperators.Contains(nestedOperator) &&
                 rule.Rules != null && rule.Rules.Any())
             {
                 return BuildNestedExpression(rule, nestedOperator, typeParameterExpressions, ruleInputExp);
@@ -166,19 +155,17 @@ namespace RulesEngine
         /// <exception cref="InvalidCastException"></exception>
         private Expression<Func<RuleInput, RuleResultTree>> BuildNestedExpression(Rule parentRule, ExpressionType operation, IEnumerable<ParameterExpression> typeParameterExpressions, ParameterExpression ruleInputExp)
         {
-            List<Expression<Func<RuleInput, RuleResultTree>>> expressions = new List<Expression<Func<RuleInput, RuleResultTree>>>();
+            IList<Expression<Func<RuleInput, RuleResultTree>>> expressions = new List<Expression<Func<RuleInput, RuleResultTree>>>();
             foreach (var r in parentRule.Rules)
             {
                 expressions.Add(GetExpressionForRule(r, typeParameterExpressions, ruleInputExp));
             }
 
-            List<MemberInitExpression> childRuleResultTree = new List<MemberInitExpression>();
+            IList<MemberInitExpression> childRuleResultTree = new List<MemberInitExpression>();
 
             foreach (var exp in expressions)
             {
-                var resultMemberInitExpression = exp.Body as MemberInitExpression;
-
-                if (resultMemberInitExpression == null)// assert is a MemberInitExpression
+                if (!(exp.Body is MemberInitExpression resultMemberInitExpression))// assert is a MemberInitExpression
                 {
                     throw new InvalidCastException($"expression.Body '{exp.Body}' is not of MemberInitExpression type.");
                 }
@@ -235,9 +222,8 @@ namespace RulesEngine
                 throw new ArgumentNullException($"{nameof(expression)} should not be null.");
             }
 
-            var memberInitExpression = expression.Body as MemberInitExpression;
 
-            if (memberInitExpression == null)// assert it's a MemberInitExpression
+            if (!(expression.Body is MemberInitExpression memberInitExpression))// assert it's a MemberInitExpression
             {
                 throw new InvalidCastException($"expression.Body '{expression.Body}' is not of MemberInitExpression type.");
             }
@@ -254,9 +240,8 @@ namespace RulesEngine
                 throw new NullReferenceException($"{nameof(RuleResultTree.IsSuccess)} assignment expression can not be null.");
             }
 
-            BinaryExpression isSuccessExpression = isSuccessBinding.Expression as BinaryExpression;
 
-            if (isSuccessExpression == null)
+            if (!(isSuccessBinding.Expression is BinaryExpression isSuccessExpression))
             {
                 throw new NullReferenceException($"Expected {nameof(RuleResultTree.IsSuccess)} assignment expression to be of {typeof(BinaryExpression)} and not {isSuccessBinding.Expression.GetType()}");
             }

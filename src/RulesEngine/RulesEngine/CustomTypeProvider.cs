@@ -10,11 +10,14 @@ namespace RulesEngine
 {
     public class CustomTypeProvider : DefaultDynamicLinqCustomTypeProvider
     {
-        private HashSet<Type> _types;
+        private readonly HashSet<Type> _types;
         public CustomTypeProvider(Type[] types) : base()
         {
-            _types = new HashSet<Type>(types ?? new Type[] { });
-            _types.Add(typeof(ExpressionUtils));
+            HashSet<Type> hashSets = new HashSet<Type>(types ?? Array.Empty<Type>())
+            {
+                typeof(ExpressionUtils)
+            };
+            _types = hashSets;
         }
 
         public override HashSet<Type> GetCustomTypes()

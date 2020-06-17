@@ -26,7 +26,7 @@ namespace RulesEngine.HelperFunctions
         }
         public static Type CreateAbstractClassType(dynamic input)
         {
-            List<DynamicProperty> props = new List<DynamicProperty>();
+            IList<DynamicProperty> props = new List<DynamicProperty>();
 
             if (input == null)
             {
@@ -39,16 +39,16 @@ namespace RulesEngine.HelperFunctions
 
             else
             {
-                foreach (var expando in (IDictionary<string, object>)input)
+                foreach (KeyValuePair<string, object> expando in (IDictionary<string, object>)input)
                 {
                     Type value;
-                    if (expando.Value is IList)
+                    if (expando.Value is IList list)
                     {
-                        if (((IList)expando.Value).Count == 0)
+                        if (list.Count == 0)
                             value = typeof(List<object>);
                         else
                         {
-                            var internalType = CreateAbstractClassType(((IList)expando.Value)[0]);
+                            var internalType = CreateAbstractClassType(list[0]);
                             value = new List<object>().Cast(internalType).ToList(internalType).GetType();
                         }
 
@@ -84,11 +84,11 @@ namespace RulesEngine.HelperFunctions
                         var propType = type.GetProperty(expando.Key).PropertyType;
                         val = CreateObject(propType, expando.Value);
                     }
-                    else if (expando.Value is IList)
+                    else if (expando.Value is IList list)
                     {
                         var internalType = type.GetProperty(expando.Key).PropertyType.GenericTypeArguments.FirstOrDefault() ?? typeof(object);
-                        var temp = (IList)expando.Value;
-                        var newList = new List<object>();
+                        var temp = list;
+                        IList<object> newList = new List<object>();
                         for (int i = 0; i < temp.Count; i++)
                         {
                             var child = CreateObject(internalType, temp[i]);
@@ -122,6 +122,5 @@ namespace RulesEngine.HelperFunctions
             return genericMethod.Invoke(null, new[] { self }) as IList;
         }
     }
-
 
 }

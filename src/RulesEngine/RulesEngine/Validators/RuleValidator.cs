@@ -13,13 +13,14 @@ namespace RulesEngine.Validators
 {
     internal class RuleValidator : AbstractValidator<Rule>
     {
-        private readonly List<ExpressionType> _nestedOperators = new List<ExpressionType> { ExpressionType.And, ExpressionType.AndAlso, ExpressionType.Or, ExpressionType.OrElse };
+        private readonly IList<ExpressionType> _nestedOperators = new List<ExpressionType> { ExpressionType.And, ExpressionType.AndAlso, ExpressionType.Or, ExpressionType.OrElse };
         public RuleValidator()
         {
-            RuleFor(c => c.RuleName).NotEmpty().WithMessage(Constants.RULE_NAME_NULL_ERRMSG);
+            IRuleBuilderOptions<Rule, string> ruleBuilderOptions = RuleFor(c => c.RuleName).NotEmpty()
+                                    .WithMessage(Constants.RULE_NAME_NULL_ERRMSG);
 
             //Nested expression check
-            When(c => c.RuleExpressionType == null, () =>
+            IConditionBuilder conditionBuilder = When(c => c.RuleExpressionType == null, () =>
              {
                  RuleFor(c => c.Operator)
                     .NotNull().WithMessage(Constants.OPERATOR_NULL_ERRMSG)
@@ -38,27 +39,28 @@ namespace RulesEngine.Validators
             RegisterExpressionTypeRules();
         }
 
-        private void RegisterExpressionTypeRules()
-        {
-            When(c => c.RuleExpressionType == RuleExpressionType.LambdaExpression, () =>
-            {
-                RuleFor(c => c.Expression).NotEmpty().WithMessage(Constants.LAMBDA_EXPRESSION_EXPRESSION_NULL_ERRMSG);
-                RuleFor(c => c.Operator).Null().WithMessage(Constants.LAMBDA_EXPRESSION_OPERATOR_ERRMSG);
-                RuleFor(c => c.Rules).Null().WithMessage(Constants.LAMBDA_EXPRESSION_RULES_ERRMSG);
-            });
-        }
+        private void RegisterExpressionTypeRules() => When(c => c.RuleExpressionType == RuleExpressionType.LambdaExpression, () =>
+                                                    {
+                                                        RuleFor(c => c.Expression).NotEmpty().WithMessage(Constants.LAMBDA_EXPRESSION_EXPRESSION_NULL_ERRMSG);
+                                                        RuleFor(c => c.Operator).Null().WithMessage(Constants.LAMBDA_EXPRESSION_OPERATOR_ERRMSG);
+                                                        RuleFor(c => c.Rules).Null().WithMessage(Constants.LAMBDA_EXPRESSION_RULES_ERRMSG);
+                                                    });
 
-        private bool BeValidRulesList(List<Rule> rules)
+        private bool BeValidRulesList(IEnumerable<Rule> rules)
         {
-            if (rules?.Any() != true) return false;
-            var validator = new RuleValidator();
-            var isValid = true;
-            foreach (var rule in rules)
+            if (rules?.Any() == true)
             {
-                isValid &= validator.Validate(rule).IsValid;
-                if (!isValid) break;
+                var validator = new RuleValidator();
+                var isValid = true;
+                foreach (var rule in rules)
+                {
+                    isValid &= validator.Validate(rule).IsValid;
+                    if (!isValid) break;
+                }
+                return isValid;
             }
-            return isValid;
+
+            return false;
         }
     }
 }
