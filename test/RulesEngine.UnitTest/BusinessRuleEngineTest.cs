@@ -37,7 +37,7 @@ namespace RulesEngine.UnitTest
             dynamic input2 = GetInput2();
             dynamic input3 = GetInput3();
 
-            var result = re.ExecuteRule("inputWorkflowReference", new List<dynamic>() { input1, input2, input3 }.AsEnumerable(), new object[] { });
+            IEnumerable<RuleResultTree> result = re.ExecuteRule("inputWorkflowReference", new List<dynamic>() { input1, input2, input3 }.AsEnumerable(), Array.Empty<object>());
             Assert.NotNull(result);
             Assert.IsType<List<RuleResultTree>>(result);
         }
@@ -52,7 +52,7 @@ namespace RulesEngine.UnitTest
             dynamic input2 = GetInput2();
             dynamic input3 = GetInput3();
 
-            var result = re.ExecuteRule("inputWorkflow", new List<dynamic>() { input1, input2, input3 }.AsEnumerable(), new object[] { });
+            var result = re.ExecuteRule("inputWorkflow", new List<dynamic>() { input1, input2, input3 }.AsEnumerable(), Array.Empty<object>());
             Assert.NotNull(result);
             Assert.IsType<List<RuleResultTree>>(result);
         }
@@ -82,7 +82,7 @@ namespace RulesEngine.UnitTest
             dynamic input2 = GetInput2();
             dynamic input3 = GetInput3();
 
-            var result = re.ExecuteRule("inputWorkflow", new List<dynamic>() { input1, input2, input3 }.AsEnumerable(), new object[] { });
+            List<RuleResultTree> result = (List<RuleResultTree>)re.ExecuteRule("inputWorkflow", new List<dynamic>() { input1, input2, input3 }.AsEnumerable(), Array.Empty<object>());
             Assert.NotNull(result);
             Assert.IsType<List<RuleResultTree>>(result);
             Assert.False(string.IsNullOrEmpty(result[0].ExceptionMessage) || string.IsNullOrWhiteSpace(result[0].ExceptionMessage));
@@ -98,7 +98,7 @@ namespace RulesEngine.UnitTest
             dynamic input2 = GetInput2();
             dynamic input3 = GetInput3();
 
-            var result = re.ExecuteRule("inputWorkflow", new List<dynamic>() { input1, input2, input3 }.AsEnumerable(), new object[] { });
+            var result = re.ExecuteRule("inputWorkflow", new List<dynamic>() { input1, input2, input3 }.AsEnumerable(), Array.Empty<object>());
             Assert.NotNull(result);
             Assert.IsType<List<RuleResultTree>>(result);
             Assert.NotNull(result.First().GetMessages());
@@ -134,7 +134,7 @@ namespace RulesEngine.UnitTest
             var re = GetRulesEngine(ruleFileName);
             dynamic input = GetInput1();
 
-            Assert.Throws<ArgumentException>(() => { re.ExecuteRule("inputWorkflow1", new List<dynamic>() { input }.AsEnumerable(), new object[] { }); });
+            Assert.Throws<ArgumentException>(() => { re.ExecuteRule("inputWorkflow1", new List<dynamic>() { input }.AsEnumerable(), Array.Empty<object>()); });
         }
 
         [Theory]
@@ -148,7 +148,7 @@ namespace RulesEngine.UnitTest
             dynamic input2 = GetInput2();
             dynamic input3 = GetInput3();
 
-            var result = re.ExecuteRule("inputWorkflow", new List<dynamic>() { input1, input2, input3 }.AsEnumerable(), new object[] { });
+            var result = re.ExecuteRule("inputWorkflow", new List<dynamic>() { input1, input2, input3 }.AsEnumerable(), Array.Empty<object>());
             Assert.NotNull(result);
             Assert.IsType<List<RuleResultTree>>(result);
         }

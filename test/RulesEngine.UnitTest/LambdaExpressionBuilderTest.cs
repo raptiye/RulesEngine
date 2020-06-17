@@ -17,20 +17,26 @@ namespace RulesEngine.UnitTest
             var objBuilderFactory = new RuleExpressionBuilderFactory(new ReSettings());
             var builder = objBuilderFactory.RuleGetExpressionBuilder(RuleExpressionType.LambdaExpression);
 
-            var parameterExpressions = new List<ParameterExpression>();
-            parameterExpressions.Add(Expression.Parameter(typeof(string), "RequestType"));
-            parameterExpressions.Add(Expression.Parameter(typeof(string), "RequestStatus"));
-            parameterExpressions.Add(Expression.Parameter(typeof(string), "RegistrationStatus"));
+            var parameterExpressions = new List<ParameterExpression>
+            {
+                Expression.Parameter(typeof(string), "RequestType"),
+                Expression.Parameter(typeof(string), "RequestStatus"),
+                Expression.Parameter(typeof(string), "RegistrationStatus")
+            };
 
-            Rule mainRule = new Rule();
-            mainRule.RuleName = "rule1";
-            mainRule.Operator = "And";
-            mainRule.Rules = new List<Rule>();
+            Rule mainRule = new Rule
+            {
+                RuleName = "rule1",
+                Operator = "And",
+                Rules = new List<Rule>()
+            };
 
-            Rule dummyRule = new Rule();
-            dummyRule.RuleName = "testRule1";
-            dummyRule.RuleExpressionType = RuleExpressionType.LambdaExpression;
-            dummyRule.Expression = "RequestType == \"vod\"";
+            Rule dummyRule = new Rule
+            {
+                RuleName = "testRule1",
+                RuleExpressionType = RuleExpressionType.LambdaExpression,
+                Expression = "RequestType == \"vod\""
+            };
 
             mainRule.Rules.Add(dummyRule);
 

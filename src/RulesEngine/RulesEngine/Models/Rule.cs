@@ -68,7 +68,7 @@ namespace RulesEngine.Models
         /// <value>
         /// The rules.
         /// </value>
-        public IEnumerable<Rule> Rules { get; set; }
+        public IList<Rule> Rules { get; set; }
 
         /// <summary>
         /// Gets or Sets the lambda expression. 
